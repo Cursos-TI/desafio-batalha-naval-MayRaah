@@ -1,40 +1,83 @@
 #include <stdio.h>
 
-// Desafio Batalha Naval - MateCheck
-// Este código inicial serve como base para o desenvolvimento do sistema de Batalha Naval.
-// Siga os comentários para implementar cada parte do desafio.
+#define TAMANHO_TABULEIRO 10
+#define TAMANHO_NAVIO 3
 
 int main() {
-    // Nível Novato - Posicionamento dos Navios
-    // Sugestão: Declare uma matriz bidimensional para representar o tabuleiro (Ex: int tabuleiro[5][5];).
-    // Sugestão: Posicione dois navios no tabuleiro, um verticalmente e outro horizontalmente.
-    // Sugestão: Utilize `printf` para exibir as coordenadas de cada parte dos navios.
+    int tabuleiro[TAMANHO_TABULEIRO][TAMANHO_TABULEIRO];
+    int i, j;
 
-    // Nível Aventureiro - Expansão do Tabuleiro e Posicionamento Diagonal
-    // Sugestão: Expanda o tabuleiro para uma matriz 10x10.
-    // Sugestão: Posicione quatro navios no tabuleiro, incluindo dois na diagonal.
-    // Sugestão: Exiba o tabuleiro completo no console, mostrando 0 para posições vazias e 3 para posições ocupadas.
+    // 1. Inicializa o tabuleiro com 0 (água)
+    for (i = 0; i < TAMANHO_TABULEIRO; i++) {
+        for (j = 0; j < TAMANHO_TABULEIRO; j++) {
+            tabuleiro[i][j] = 0;
+        }
+    }
 
-    // Nível Mestre - Habilidades Especiais com Matrizes
-    // Sugestão: Crie matrizes para representar habilidades especiais como cone, cruz, e octaedro.
-    // Sugestão: Utilize estruturas de repetição aninhadas para preencher as áreas afetadas por essas habilidades no tabuleiro.
-    // Sugestão: Exiba o tabuleiro com as áreas afetadas, utilizando 0 para áreas não afetadas e 1 para áreas atingidas.
+    // 2. Define as coordenadas iniciais dos navios
+    int linha_h = 2; // linha inicial do navio horizontal
+    int coluna_h = 4; // coluna inicial do navio horizontal
 
-    // Exemplos de exibição das habilidades:
-    // Exemplo para habilidade em cone:
-    // 0 0 1 0 0
-    // 0 1 1 1 0
-    // 1 1 1 1 1
-    
-    // Exemplo para habilidade em octaedro:
-    // 0 0 1 0 0
-    // 0 1 1 1 0
-    // 0 0 1 0 0
+    int linha_v = 5; // linha inicial do navio vertical
+    int coluna_v = 7; // coluna inicial do navio vertical
 
-    // Exemplo para habilidade em cruz:
-    // 0 0 1 0 0
-    // 1 1 1 1 1
-    // 0 0 1 0 0
+    // 3. Validação: verificar se o navio horizontal cabe no tabuleiro
+    if (coluna_h + TAMANHO_NAVIO > TAMANHO_TABULEIRO) {
+        printf("Erro: Navio horizontal não cabe no tabuleiro!\n");
+        return 1; // encerra o programa
+    }
+
+    // 4. Validação: verificar se o navio vertical cabe no tabuleiro
+    if (linha_v + TAMANHO_NAVIO > TAMANHO_TABULEIRO) {
+        printf("Erro: Navio vertical não cabe no tabuleiro!\n");
+        return 1; // encerra o programa
+    }
+
+    // 5. Verificar se há sobreposição antes de posicionar
+    int sobreposicao = 0;
+    for (i = 0; i < TAMANHO_NAVIO; i++) {
+        if (tabuleiro[linha_h][coluna_h + i] == 3) {
+            sobreposicao = 1;
+            break;
+        }
+        if (tabuleiro[linha_v + i][coluna_v] == 3) {
+            sobreposicao = 1;
+            break;
+        }
+    }
+
+    // Verificar interseção específica entre os dois navios
+    for (i = 0; i < TAMANHO_NAVIO; i++) {
+        for (j = 0; j < TAMANHO_NAVIO; j++) {
+            if (linha_h == linha_v + i && coluna_h + j == coluna_v) {
+                sobreposicao = 1;
+            }
+        }
+    }
+
+    if (sobreposicao) {
+        printf("Erro: Os navios se sobrepõem!\n");
+        return 1; // encerra o programa
+    }
+
+    // 6. Posiciona o navio horizontal (marca com 3)
+    for (i = 0; i < TAMANHO_NAVIO; i++) {
+        tabuleiro[linha_h][coluna_h + i] = 3;
+    }
+
+    // 7. Posiciona o navio vertical (marca com 3)
+    for (i = 0; i < TAMANHO_NAVIO; i++) {
+        tabuleiro[linha_v + i][coluna_v] = 3;
+    }
+
+    // 8. Exibe o tabuleiro
+    printf("\nTabuleiro:\n");
+    for (i = 0; i < TAMANHO_TABULEIRO; i++) {
+        for (j = 0; j < TAMANHO_TABULEIRO; j++) {
+            printf("%d ", tabuleiro[i][j]);
+        }
+        printf("\n");
+    }
 
     return 0;
 }
